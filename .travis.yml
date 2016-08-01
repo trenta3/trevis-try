@@ -5,9 +5,14 @@ branches:
 
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian
+    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk
 
 script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
 - find . -type f -iname "*.pdf" -exec ./do checkout {} \;
 
+deploy:
+  skip_cleanup: true
+  provider: surge
+  project: ../compiled-pdfs/
+  domain: prova-di-travis.surge.sh
