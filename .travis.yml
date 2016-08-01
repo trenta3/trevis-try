@@ -1,9 +1,13 @@
-language: c
+language: perl
+branches:
+  only:
+  - master
+
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian
+    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk
 
 script:
-- pdflatex first-example.tex
-
+- find . -type f -iname "*.tex" -exec ./do compile {} \;
+- find . -type f -iname "*.pdf" -exec ./do checkout {} \;
 

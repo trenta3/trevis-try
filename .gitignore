@@ -5,4 +5,10 @@
 *.bak
 *.aux
 *.log
+*.fls
+*.fdb_latexmk
+
 *.pdf
+*.dvi
+*.ps
+
