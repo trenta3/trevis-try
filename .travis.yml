@@ -1,7 +1,7 @@
 language: c
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian texlive-lang-english
+    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian
 
 script:
 - pdflatex first-example.tex
