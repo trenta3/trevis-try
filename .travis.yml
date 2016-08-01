@@ -1,4 +1,7 @@
 language: ruby
+rvm:
+- 2.2
+
 branches:
   only:
   - master
@@ -6,7 +9,8 @@ branches:
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev ruby
-    - sudo gem install kramdown
+
+install: gem install kramdown
 
 script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
