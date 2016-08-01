@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Questo script creerà un po' di file index.html per surge (con annessi css)
-# per poter indicizzare tutti i file presenti nelle sottodirectory
-
-# Cerchiamo tutti i file nelle sottodirectory

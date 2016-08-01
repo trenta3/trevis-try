@@ -11,8 +11,9 @@ before_install:
 script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
 - find . -type f -iname "*.pdf" -exec ./do checkout {} \;
-- ./do checkout index-files
-- cd ../compiled-pdfs/ && ./index-files && rm index-files
+- find . -type f -iname "*.md" -exec ./do checkout {} \;
+- cp indexing ../
+- cd ../ && ./indexing compiled-pdfs
 
 deploy:
   skip_cleanup: true
