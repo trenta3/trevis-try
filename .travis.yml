@@ -11,6 +11,9 @@ script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
 - find . -type f -iname "*.pdf" -exec ./do checkout {} \;
 
+before_deploy:
+- cp .htaccess ../compiled-pdfs/.htaccess
+
 deploy:
   skip_cleanup: true
   provider: surge
