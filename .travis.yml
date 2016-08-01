@@ -1,16 +1,18 @@
-language: c
+language: ruby
 branches:
   only:
   - master
 
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk
+    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev
+    - sudo gem install kramdown
 
 script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
 - find . -type f -iname "*.pdf" -exec ./do checkout {} \;
-- ./do checkout .htaccess
+- ./do checkout index-files
+- cd ../compiled-pdfs/ && ./index-files && rm index-files
 
 deploy:
   skip_cleanup: true
