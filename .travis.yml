@@ -1,10 +1,7 @@
-addons:
-  apt:
-    packages:
-    - texlive-latex-base
-    - texlive-base
-    - texlive-lang-italian
-    - texlive-lang-english
+language: c
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian texlive-lang-english
 
 script:
 - pdflatex first-example.tex
