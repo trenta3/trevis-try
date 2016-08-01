@@ -1,0 +1,8 @@
+*.save
+*.save.*
+*~
+*#
+*.bak
+*.aux
+*.log
+*.pdf
