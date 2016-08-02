@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # Script in ruby che crea una pagina html per ogni directory con l'elenco dei file
 # che ci sono dentro per poterla indicizzare. Converte gli INDEX.md e li incorpora
