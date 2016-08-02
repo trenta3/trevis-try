@@ -18,6 +18,7 @@ script:
 - find . -type f -iname "*.md" -exec ./do checkout {} \;
 - cp -r public ../compiled-pdfs/
 - cp indexing ../
+- cp head.html ../
 - cd ../ && ./indexing compiled-pdfs
 
 deploy:
