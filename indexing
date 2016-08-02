@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 
 # Script in ruby che crea una pagina html per ogni directory con l'elenco dei file
 # che ci sono dentro per poterla indicizzare. Converte gli INDEX.md e li incorpora
@@ -16,8 +16,57 @@ def process_directory (dirpath)
 	directories = [];
 	mdcode = "";
 
-	head = File.read('head.html').gsub('#{sitetitle}', "#{sitetitle}").gsub('#{sitetagline}', "#{sitetagline}").gsub('#{sitebaseurl}', "#{sitebaseurl}")	
-	body = File.read('body.html').gsub('#{sitetitle}', "#{sitetitle}").gsub('#{sitetagline}', "#{sitetagline}").gsub('#{sitebaseurl}', "#{sitebaseurl}")
+	headfile = <<-endoffile
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+      {{sitetitle}} &middot; {{sitetagline}}
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{sitebaseurl}}/public/css/poole.css">
+  <link rel="stylesheet" href="{{sitebaseurl}}/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{sitebaseurl}}/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="{{sitebaseurl}}/public/favicon.ico">
+
+      <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+      });
+      </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+endoffile
+
+	bodyfile = <<-endoffile
+<!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="{{sitebaseurl}}/" title="Home">{{sitetitle}}</a>
+            <small>{{sitetagline}}</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        {{content}}
+      </div>
+    </div>
+endoffile
+
+	head = headfile.gsub('{{sitetitle}}', "#{sitetitle}").gsub('{{sitetagline}}', "#{sitetagline}").gsub('{{sitebaseurl}}', "#{sitebaseurl}")	
+	body = bodyfile.gsub('{{sitetitle}}', "#{sitetitle}").gsub('{{sitetagline}}', "#{sitetagline}").gsub('{{sitebaseurl}}', "#{sitebaseurl}")
 
 	puts "[LOG] Examining directory #{dirpath}"
 	Dir.entries(dirpath).sort.each do |entry|
@@ -57,13 +106,12 @@ def process_directory (dirpath)
 				output = Kramdown::Document.new(File.read("#{dirpath}/#{entry}")).to_html
 				File.open("#{dirpath}/#{base}.html", 'w') do |f|
 					f.puts "<html>" + head + "<body>"
-					puts "[DEBUG] body gsub is #{body.gsub('#{content}', output)}"
-					f.puts body.gsub('#{content}', output)
+					f.puts body.gsub('{{content}}', output)
 					f.puts "</body></html>"
 				end
 				# E poi lo eliminiamo
 				File.delete("#{dirpath}/#{entry}")
-				entries << ["#{base}.html", "#{base}.html"]
+				entries << ["#{base}", "#{base}.html"]
 			else
 				puts "[LOG] #{entry} Is file. Registered"
 				entries << ["#{entry}", "#{entry}"]
@@ -84,7 +132,7 @@ def process_directory (dirpath)
 	output = Kramdown::Document.new(mdcode).to_html
 	File.open("#{dirpath}/index.html", 'w') do |f|
 		f.puts "<html>" + head + "<body>"
-		f.puts body.gsub('#{content}', output)
+		f.puts body.gsub('{{content}}', output)
 		f.puts "</body></html>"
 	end
 
