@@ -8,7 +8,7 @@ branches:
 
 before_install:
     - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev ruby
+    - sudo apt-get -qq -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev ruby
 
 install: gem install kramdown
 
@@ -19,6 +19,7 @@ script:
 - cp -r public ../compiled-pdfs/
 - cp indexing ../
 - cp head.html ../
+- cp body.html ../
 - cd ../ && ./indexing compiled-pdfs
 
 deploy:

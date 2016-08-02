@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 
 # Script in ruby che crea una pagina html per ogni directory con l'elenco dei file
 # che ci sono dentro per poterla indicizzare. Converte gli INDEX.md e li incorpora
@@ -17,6 +17,7 @@ def process_directory (dirpath)
 	mdcode = "";
 
 	head = File.read('head.html').gsub('#{sitetitle}', "#{sitetitle}").gsub('#{sitetagline}', "#{sitetagline}").gsub('#{sitebaseurl}', "#{sitebaseurl}")	
+	body = File.read('body.html').gsub('#{sitetitle}', "#{sitetitle}").gsub('#{sitetagline}', "#{sitetagline}").gsub('#{sitebaseurl}', "#{sitebaseurl}")
 
 	puts "[LOG] Examining directory #{dirpath}"
 	Dir.entries(dirpath).sort.each do |entry|
@@ -56,7 +57,7 @@ def process_directory (dirpath)
 				output = Kramdown::Document.new(File.read("#{dirpath}/#{entry}")).to_html
 				File.open("#{dirpath}/#{base}.html", 'w') do |f|
 					f.puts "<html>" + head + "<body>"
-					f.puts output
+					f.puts body.gsub('#{content}', output)
 					f.puts "</body></html>"
 				end
 				# E poi lo eliminiamo
@@ -81,7 +82,7 @@ def process_directory (dirpath)
 	puts "[LOG] Saving html"
 	File.open("#{dirpath}/index.html", 'w') do |f|
 		f.puts "<html>" + head + "<body>"
-		f.puts Kramdown::Document.new(mdcode).to_html
+		f.puts body.gsub('#{content}', Kramdown::Document.new(mdcode).to_html)
 		f.puts "</body></html>"
 	end
 

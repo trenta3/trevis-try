@@ -37,6 +37,7 @@
 /* Prevent scroll on narrow devices */
 html,
 body {
+  margin: 0 12%;
   overflow-x: hidden;
 }
 
