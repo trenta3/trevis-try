@@ -28,7 +28,7 @@ def process_directory (dirpath)
 		elsif entry == ".." then
 			# Se è la cartella superiore la elenchiamo
 			puts "[LOG] Entry .. registered"
-			entries << ["..", "../index.html", "d"]
+			entries << ["..", "../index.html"]
 		elsif entry == "public" then
 			# Se la cartella è public la togliamo dall'indice
 			puts "[LOG] Entry public ignored"
@@ -46,7 +46,7 @@ def process_directory (dirpath)
 		elsif File.directory?("#{dirpath}/#{entry}") then
 			# Se è un'altra cartella ci vorremo tornare più avanti
 			puts "[LOG] #{entry} Is dir. Saving for future work"
-			entries << ["#{entry}", "#{entry}/index.html", "d"]
+			entries << ["#{entry}/", "#{entry}/index.html"]
 			directories << "#{dirpath}/#{entry}"
 		elsif File.file?("#{dirpath}/#{entry}") then
 			# Se è un file vogliamo elencarlo
@@ -63,10 +63,10 @@ def process_directory (dirpath)
 				end
 				# E poi lo eliminiamo
 				File.delete("#{dirpath}/#{entry}")
-				entries << ["#{base}.html", "#{base}.html", "f"]
+				entries << ["#{base}.html", "#{base}.html"]
 			else
 				puts "[LOG] #{entry} Is file. Registered"
-				entries << ["#{entry}", "#{entry}", "f"]
+				entries << ["#{entry}", "#{entry}"]
 			end
 		else
 			puts "[LOG] Unrecognized #{entry}"
@@ -77,7 +77,7 @@ def process_directory (dirpath)
 	puts "[LOG] Producing html"
 	mdcode += "# Elenco file nella directory\n\n"
 	entries.each do |e|
-		mdcode += "* [`#{e[0]}`](#{e[1]}) (#{e[2]})\n\n"
+		mdcode += "* [`#{e[0]}`](#{e[1]})\n\n"
 	end
 
 	puts "[LOG] Saving html"
