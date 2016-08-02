@@ -6,9 +6,17 @@ branches:
   only:
   - master
 
+cache:
+  timeout: 1000
+  key: apt-cache
+  paths:
+  - ../apt-cache/
+
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev ruby
+    - export APT_CACHE_DIR=`pwd`/../apt-cache && mkdir -pv $APT_CACHE_DIR
+    - sudo apt-get -yq update
+    - sudo apt-get -o dir::cache::archives="$APT_CACHE_DIR" -y install texlive-latex-base texlive-base texlive-lang-italian latexmk ruby-dev ruby
+    - sudo apt-get -o dir::cache::archives="$APT_CACHE_DIR" -y install texlive-fonts-extra texlive-latex-recommended
 
 install: gem install kramdown
 
