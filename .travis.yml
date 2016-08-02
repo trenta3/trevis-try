@@ -16,6 +16,7 @@ script:
 - find . -type f -iname "*.tex" -exec ./do compile {} \;
 - find . -type f -iname "*.pdf" -exec ./do checkout {} \;
 - find . -type f -iname "*.md" -exec ./do checkout {} \;
+- cp -r public ../compiled-pdfs/
 - cp indexing ../
 - cd ../ && ./indexing compiled-pdfs
 

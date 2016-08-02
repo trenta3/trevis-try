@@ -1,14 +1,22 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 
 # Script in ruby che crea una pagina html per ogni directory con l'elenco dei file
 # che ci sono dentro per poterla indicizzare. Converte gli INDEX.md e li incorpora
 
+# Da includere dei css e mathjax nella head
+
 require 'kramdown'
 
 def process_directory (dirpath)
+	sitetitle = "Prova di Travis"
+	sitetagline = "Si capisce dal titolo"
+	sitebaseurl = "http://prova-di-travis.surge.sh"
+
 	entries = [];
 	directories = [];
 	mdcode = "";
+
+	head = File.read('head.html').gsub('#{sitetitle}', "#{sitetitle}").gsub('#{sitetagline}', "#{sitetagline}").gsub('#{sitebaseurl}', "#{sitebaseurl}")	
 
 	puts "[LOG] Examining directory #{dirpath}"
 	Dir.entries(dirpath).sort.each do |entry|
@@ -20,6 +28,9 @@ def process_directory (dirpath)
 			# Se è la cartella superiore la elenchiamo
 			puts "[LOG] Entry .. registered"
 			entries << ["..", "../index.html", "d"]
+		elsif entry == "public" then
+			# Se la cartella è public la togliamo dall'indice
+			puts "[LOG] Entry public ignored"
 		elsif entry =~ /^index.html$/i then
 			# L'index non lo indicizziamo e verrà sovrascritto
 			puts "[LOG] Entry index.html skipped"
@@ -44,7 +55,9 @@ def process_directory (dirpath)
 				puts "[LOG] #{entry} is markdown. Converting"
 				output = Kramdown::Document.new(File.read("#{dirpath}/#{entry}")).to_html
 				File.open("#{dirpath}/#{base}.html", 'w') do |f|
+					f.puts "<html>" + head + "<body>"
 					f.puts output
+					f.puts "</body></html>"
 				end
 				# E poi lo eliminiamo
 				File.delete("#{dirpath}/#{entry}")
@@ -62,12 +75,14 @@ def process_directory (dirpath)
 	puts "[LOG] Producing html"
 	mdcode += "# Elenco file nella directory\n\n"
 	entries.each do |e|
-		mdcode += "* [#{e[0]}](#{e[1]}) (#{e[2]})\n\n"
+		mdcode += "* [`#{e[0]}`](#{e[1]}) (#{e[2]})\n\n"
 	end
 
 	puts "[LOG] Saving html"
 	File.open("#{dirpath}/index.html", 'w') do |f|
+		f.puts "<html>" + head + "<body>"
 		f.puts Kramdown::Document.new(mdcode).to_html
+		f.puts "</body></html>"
 	end
 
 	directories.each do |dir|
