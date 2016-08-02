@@ -57,6 +57,7 @@ def process_directory (dirpath)
 				output = Kramdown::Document.new(File.read("#{dirpath}/#{entry}")).to_html
 				File.open("#{dirpath}/#{base}.html", 'w') do |f|
 					f.puts "<html>" + head + "<body>"
+					puts "[DEBUG] body gsub is #{body.gsub('#{content}', output)}"
 					f.puts body.gsub('#{content}', output)
 					f.puts "</body></html>"
 				end
@@ -80,9 +81,10 @@ def process_directory (dirpath)
 	end
 
 	puts "[LOG] Saving html"
+	output = Kramdown::Document.new(mdcode).to_html
 	File.open("#{dirpath}/index.html", 'w') do |f|
 		f.puts "<html>" + head + "<body>"
-		f.puts body.gsub('#{content}', Kramdown::Document.new(mdcode).to_html)
+		f.puts body.gsub('#{content}', output)
 		f.puts "</body></html>"
 	end
 
